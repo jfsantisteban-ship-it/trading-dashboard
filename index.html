@@ -291,6 +291,16 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
 <!-- ═══ JOURNAL ═══ -->
 <div id="tab-journal" style="display:none">
   <div class="journal-metrics" id="journal-metrics"></div>
+  <!-- GRÁFICAS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">📈 Curva de capital (R acumulado)</div><div class="card-body" style="padding:10px 12px"><svg id="chart-curve" width="100%" height="150" viewBox="0 0 480 150" preserveAspectRatio="none"></svg></div></div>
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">📊 Distribución de resultados (R)</div><div class="card-body" style="padding:10px 12px"><svg id="chart-dist" width="100%" height="150" viewBox="0 0 480 150"></svg></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">🎯 Winrate F1 vs F2</div><div class="card-body" style="padding:10px 12px"><svg id="chart-fam" width="100%" height="120" viewBox="0 0 280 120"></svg></div></div>
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">⏱ Winrate por combo TF</div><div class="card-body" style="padding:10px 12px"><svg id="chart-tf" width="100%" height="120" viewBox="0 0 280 120"></svg></div></div>
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">🔥 Rachas</div><div class="card-body" style="padding:10px 12px"><svg id="chart-streak" width="100%" height="120" viewBox="0 0 280 120"></svg></div></div>
+  </div>
   <div class="journal-filters">
     <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">FILTRAR:</span>
     <button class="jfilter active" onclick="setJFilter('all',this)">Todos</button>
@@ -650,11 +660,11 @@ function render() {
   const badge=document.getElementById('dec-badge'), ep=document.getElementById('execute-panel');
   if(answered===0){badge.className='decision-badge wait';badge.textContent='⏳ Completa el checklist para ver la señal';ep.classList.add('hidden');}
   else if(critFailed){badge.className='decision-badge stop';badge.textContent='🚫 CRITERIO CRÍTICO ★ FALLIDO — No operar';ep.classList.add('hidden');}
-  else if(critChecked===critTotal&&critTotal>0&&checked>=Math.round(total*0.75)){
+  else if(critChecked===critTotal&&critTotal>0){
     badge.className='decision-badge go';
-    badge.innerHTML=`✅ SETUP VÁLIDO (${pct}% · ${critChecked}/${critTotal} críticos) · <button onclick="showExecutePanel()" style="background:${f.color};border:none;color:#000;font-family:var(--sans);font-weight:700;padding:4px 14px;border-radius:6px;cursor:pointer;margin-left:8px;font-size:12px">⚡ Registrar operación</button>`;
+    badge.innerHTML=`✅ CRÍTICOS OK (${critChecked}/${critTotal} ★ · ${pct}% total) · <button onclick="showExecutePanel()" style="background:${f.color};border:none;color:#000;font-family:var(--sans);font-weight:700;padding:4px 14px;border-radius:6px;cursor:pointer;margin-left:8px;font-size:12px">⚡ Registrar operación</button>`;
     updateExecutePanelDefaults();
-  } else if(critChecked===critTotal&&critTotal>0){badge.className='decision-badge wait';badge.textContent='⚠️ Críticos OK — faltan confirmaciones';ep.classList.add('hidden');}
+  }
   else{badge.className='decision-badge wait';badge.textContent='⏳ Setup incompleto — sigue verificando';ep.classList.add('hidden');}
 
   // mgmt
@@ -759,7 +769,158 @@ function renderJournalTable(){
   }).join('');
 }
 
-function renderJournal(){renderJournalMetrics();renderJournalTable();}
+
+// ═══════════════════════════════════════════════
+// GRÁFICAS SVG
+// ═══════════════════════════════════════════════
+function svgT(x,y,txt,color='#4a6080',size=9,anchor='middle',weight=400){
+  return`<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="'Share Tech Mono',monospace" font-size="${size}" fill="${color}" font-weight="${weight}">${txt}</text>`;
+}
+function svgEmpty(el,msg='Sin datos — registra operaciones'){
+  el.innerHTML=svgT(el.viewBox&&el.viewBox.baseVal?el.viewBox.baseVal.width/2:240,el.viewBox&&el.viewBox.baseVal?el.viewBox.baseVal.height/2:75,msg,'#4a6080',9);
+}
+
+function renderChartCurve(trades){
+  const el=document.getElementById('chart-curve');if(!el)return;
+  const closed=trades.filter(t=>t.status!=='open'&&t.result!=null).sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+  if(closed.length<2){el.innerHTML=svgT(240,75,'Sin datos suficientes','#4a6080',9);return;}
+  const W=480,H=150,PL=38,PR=8,PT=12,PB=22;
+  const vals=[0,...closed.map((_,i)=>closed.slice(0,i+1).reduce((s,t)=>s+parseFloat(t.result||0),0))];
+  const mn=Math.min(...vals),mx=Math.max(...vals),range=mx-mn||1;
+  const xs=i=>PL+(W-PL-PR)*i/(vals.length-1);
+  const ys=v=>PT+(H-PT-PB)*(1-(v-mn)/range);
+  let svg='';
+  // grid
+  const steps=[Math.floor(mn)-1,0,Math.ceil(mx)+1].filter((v,i,a)=>a.indexOf(v)===i);
+  [-2,-1,0,1,2,3,4,5].filter(r=>r>=mn-0.5&&r<=mx+0.5).forEach(r=>{
+    const y=ys(r);
+    svg+=`<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="${r===0?'#2a3d55':'#1e2d4560'}" stroke-width="${r===0?1:0.5}" stroke-dasharray="${r===0?'':'3 3'}"/>`;
+    svg+=svgT(PL-4,y+3,r+'R',r===0?'#c8d6e8':'#4a6080',8,'end');
+  });
+  // line
+  const pts=vals.map((v,i)=>`${xs(i)},${ys(v)}`).join(' ');
+  const finalColor=vals[vals.length-1]>=0?'#00e5a0':'#ff4560';
+  svg+=`<polyline points="${pts}" fill="none" stroke="${finalColor}" stroke-width="2" stroke-linejoin="round"/>`;
+  vals.forEach((v,i)=>{
+    if(i===0)return;
+    svg+=`<circle cx="${xs(i)}" cy="${ys(v)}" r="2.5" fill="${v>=0?'#00e5a0':'#ff4560'}" opacity="0.8"/>`;
+  });
+  const fv=vals[vals.length-1];
+  svg+=svgT(xs(vals.length-1)-4,ys(fv)-7,(fv>=0?'+':'')+fv.toFixed(1)+'R',finalColor,9,'end',700);
+  svg+=`<line x1="${PL}" y1="${H-PB}" x2="${W-PR}" y2="${H-PB}" stroke="#1e2d45" stroke-width="0.5"/>`;
+  svg+=svgT(PL,H-6,'0','#4a6080',8,'middle');
+  svg+=svgT((W-PR+PL)/2,H-6,closed.length+' trades','#4a6080',8,'middle');
+  svg+=svgT(W-PR,H-6,closed.length+'','#4a6080',8,'middle');
+  el.innerHTML=svg;
+}
+
+function renderChartDist(trades){
+  const el=document.getElementById('chart-dist');if(!el)return;
+  const closed=trades.filter(t=>t.status!=='open'&&t.result!=null);
+  if(closed.length<2){el.innerHTML=svgT(240,75,'Sin datos suficientes','#4a6080',9);return;}
+  const W=480,H=150,PL=20,PR=10,PT=12,PB=28;
+  const buckets=[
+    {label:'< -2R',min:-99,max:-2,color:'#ff2040'},
+    {label:'-2/-1R',min:-2,max:-1,color:'#ff4560'},
+    {label:'-1/0R',min:-1,max:0,color:'#ff8090'},
+    {label:'0/1R',min:0,max:1,color:'#60d0b0'},
+    {label:'1/2R',min:1,max:2,color:'#00e5a0'},
+    {label:'> 2R',min:2,max:99,color:'#00c070'},
+  ];
+  buckets.forEach(b=>b.count=closed.filter(t=>parseFloat(t.result)>=b.min&&parseFloat(t.result)<b.max).length);
+  const maxC=Math.max(...buckets.map(b=>b.count),1);
+  const bw=(W-PL-PR)/buckets.length;
+  let svg='';
+  svg+=`<line x1="${PL}" y1="${H-PB}" x2="${W-PR}" y2="${H-PB}" stroke="#1e2d45" stroke-width="0.5"/>`;
+  buckets.forEach((b,i)=>{
+    const bh=(H-PT-PB)*(b.count/maxC);
+    const x=PL+i*bw+2,y=H-PB-bh;
+    svg+=`<rect x="${x}" y="${H-PB-(H-PT-PB)}" width="${bw-4}" height="${H-PT-PB}" fill="#1e2d4530" rx="2"/>`;
+    if(b.count>0){svg+=`<rect x="${x}" y="${y}" width="${bw-4}" height="${bh}" fill="${b.color}" rx="2" opacity="0.88"/>`;svg+=svgT(x+(bw-4)/2,y-4,b.count+'',b.color,9,'middle',700);}
+    svg+=svgT(x+(bw-4)/2,H-PB+11,b.label,'#4a6080',7.5,'middle');
+  });
+  el.innerHTML=svg;
+}
+
+function renderChartFam(trades){
+  const el=document.getElementById('chart-fam');if(!el)return;
+  const W=280,H=120;
+  const fams=[{id:'F1',label:'F1 SMC',color:'#00e5a0'},{id:'F2',label:'F2 MOM',color:'#3b82f6'}];
+  let svg='';
+  fams.forEach((f,i)=>{
+    const closed=trades.filter(t=>t.family===f.id&&t.status!=='open');
+    const wins=closed.filter(t=>t.status==='win').length;
+    const wr=closed.length?Math.round(wins/closed.length*100):0;
+    const cx=70+i*140,cy=50,r=36;
+    svg+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1e2d45" stroke-width="8"/>`;
+    if(closed.length>0&&wr>0){
+      const ang=wr/100*2*Math.PI,x2=cx+r*Math.sin(ang),y2=cy-r*Math.cos(ang),lg=ang>Math.PI?1:0;
+      svg+=`<path d="M ${cx} ${cy-r} A ${r} ${r} 0 ${lg} 1 ${x2} ${y2}" fill="none" stroke="${f.color}" stroke-width="8" stroke-linecap="round"/>`;
+    }
+    svg+=svgT(cx,cy+5,wr+'%',f.color,17,'middle',800);
+    svg+=svgT(cx,H-20,f.label,'#4a6080',9,'middle');
+    svg+=svgT(cx,H-8,closed.length+' trades','#4a6080',8,'middle');
+  });
+  el.innerHTML=svg;
+}
+
+function renderChartTF(trades){
+  const el=document.getElementById('chart-tf');if(!el)return;
+  const W=280,H=120,PL=6,PB=30,PT=10;
+  const combos=[{k:'S→D→4H',color:'#8b5cf6'},{k:'D→4H→30m',color:'#3b82f6'},{k:'4H→1H→5m',color:'#00e5a0'}];
+  const bw=(W-PL*2)/combos.length;
+  let svg='';
+  combos.forEach((c,i)=>{
+    const closed=trades.filter(t=>(t.tfCombo===c.k||t.tf===c.k)&&t.status!=='open');
+    const wins=closed.filter(t=>t.status==='win').length;
+    const wr=closed.length?Math.round(wins/closed.length*100):0;
+    const maxH=H-PT-PB;
+    const bh=maxH*(wr/100);
+    const x=PL+i*bw+3;
+    svg+=`<rect x="${x}" y="${PT}" width="${bw-6}" height="${maxH}" fill="#1e2d4540" rx="3"/>`;
+    if(closed.length>0&&wr>0){svg+=`<rect x="${x}" y="${PT+maxH-bh}" width="${bw-6}" height="${bh}" fill="${c.color}" rx="3" opacity="0.88"/>`;svg+=svgT(x+(bw-6)/2,PT+maxH-bh-4,wr+'%',c.color,10,'middle',700);}
+    svg+=svgT(x+(bw-6)/2,H-PB+11,c.k,'#4a6080',7,'middle');
+    svg+=svgT(x+(bw-6)/2,H-PB+20,closed.length+' trades','#4a6080',7,'middle');
+  });
+  el.innerHTML=svg;
+}
+
+function renderChartStreak(trades){
+  const el=document.getElementById('chart-streak');if(!el)return;
+  const W=280,H=120;
+  const closed=trades.filter(t=>t.status!=='open'&&t.result!=null).sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp));
+  if(closed.length===0){el.innerHTML=svgT(140,60,'Sin datos','#4a6080',9);return;}
+  let cw=0,cl=0,mw=0,ml=0;
+  closed.forEach(t=>{if(t.status==='win'){cw++;cl=0;if(cw>mw)mw=cw;}else{cl++;cw=0;if(cl>ml)ml=cl;}});
+  const last=closed[closed.length-1];
+  const cs=last.status==='win'?cw:last.status==='loss'?cl:0;
+  const ct=last.status==='win'?'win':last.status==='loss'?'loss':'';
+  // mini bars últimas 20
+  const recent=closed.slice(-20);
+  const bw=(W-20)/Math.max(recent.length,1);
+  let svg='';
+  recent.forEach((t,i)=>{
+    const isW=t.status==='win',r=parseFloat(t.result||0);
+    const h=Math.min(Math.abs(r)*7+3,24);
+    const x=10+i*bw;
+    svg+=`<rect x="${x}" y="${36-h}" width="${bw-1.5}" height="${h}" fill="${isW?'#00e5a0':'#ff4560'}" rx="1" opacity="0.85"/>`;
+  });
+  svg+=`<line x1="10" y1="36" x2="${W-10}" y2="36" stroke="#2a3d55" stroke-width="0.5"/>`;
+  svg+=svgT(W/2,50,'Últimas '+recent.length+' ops','#4a6080',8,'middle');
+  const sc=ct==='win'?'#00e5a0':ct==='loss'?'#ff4560':'#4a6080';
+  svg+=svgT(W/2,68,'Racha actual: '+cs+' '+(ct==='win'?'✓':ct==='loss'?'✗':'—'),sc,11,'middle',700);
+  svg+=svgT(75,86,'Max ✓: '+mw,'#00e5a0',9,'middle');
+  svg+=svgT(200,86,'Max ✗: '+ml,'#ff4560',9,'middle');
+  svg+=svgT(W/2,102,'('+closed.length+' trades cerrados)','#4a6080',8,'middle');
+  el.innerHTML=svg;
+}
+
+function renderCharts(trades){
+  renderChartCurve(trades);renderChartDist(trades);
+  renderChartFam(trades);renderChartTF(trades);renderChartStreak(trades);
+}
+
+function renderJournal(){renderJournalMetrics();renderCharts(allTrades);renderJournalTable();}
 async function initJournal(){
   document.getElementById('journal-body').innerHTML='<div style="padding:24px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:11px">Cargando...</div>';
   allTrades=await window.loadTrades();renderJournal();
