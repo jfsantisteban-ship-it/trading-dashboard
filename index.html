@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel de Trading v9</title>
+<title>Panel de Trading v10</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#080c14;--bg2:#0d1220;--bg3:#111827;--border:#1e2d45;--text:#c8d6e8;--muted:#4a6080;--green:#00e5a0;--red:#ff4560;--blue:#3b82f6;--yellow:#f59e0b;--purple:#8b5cf6;--mono:'Share Tech Mono',monospace;--sans:'Syne',sans-serif;}
@@ -169,7 +169,7 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
 <header>
   <div class="logo">
     <div class="logo-icon">📈</div>
-    <div class="logo-text"><h1>Trading Dashboard v9</h1><p>F1 SMC · F2 MOMENTUM · 3 COMBOS TF CADA UNA</p></div>
+    <div class="logo-text"><h1>Trading Dashboard v10</h1><p>F1 SMC · F2 MOMENTUM · VP + MONEY FLOW · GRADOS A+/A/B/C</p></div>
   </div>
   <div class="header-right">
     <div id="session-badge" style="font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--border);color:var(--muted)">—</div>
@@ -208,12 +208,17 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
     <div id="best-setups-body"><div style="padding:20px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:11px">Completa los checklists para ver los mejores setups</div></div>
   </div>
   <div class="card">
-    <div class="card-hdr">🔥 Reglas maestras</div>
+    <div class="card-hdr">🔥 Reglas maestras v10</div>
     <div class="card-body">
       <div class="master-item"><span class="mbullet">▸</span><span>Condición necesaria en TF superior SIEMPRE antes de bajar al TF de ejecución</span></div>
-      <div class="master-item"><span class="mbullet">▸</span><span><b>F1 SMC:</b> 1.5% riesgo · R:R mínimo según combo TF · hasta 2% si todo cumplido y sin trade abierto</span></div>
-      <div class="master-item"><span class="mbullet">▸</span><span><b>F2 Momentum:</b> 1% riesgo · R:R mínimo según combo TF · solo si 80%+ criterios cumplidos</span></div>
-      <div class="master-item"><span class="mbullet">▸</span><span>ADX &lt; 25 = sin tendencia real = NO entrar aunque las señales estén alineadas</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>Críticas ★ son GATING:</b> si una sola falla, NO operar — sin importar el resto</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>Importantes ◆ suman 1 punto · Opcionales · suman 0.5 puntos</b> al score</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>Grados:</b> A+ (≥85% score) = 100-150% tamaño · A (≥60%) = 75% · B (≥35%) = 50%</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>F1 SMC:</b> 1.5% riesgo · R:R mínimo según combo · 2% si A+ y sin trade abierto</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>F2 Momentum:</b> 1% riesgo · R:R mínimo según combo · solo A o A+</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>Confluencias clave v10:</b> VAH/VAL/POC + Money Flow + Volume Delta + Premium/Discount</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span>ADX &lt; 23 = sin tendencia real = revisar si setup sigue siendo válido</span></div>
+      <div class="master-item"><span class="mbullet">▸</span><span><b>TPs escalonados obligatorios:</b> TP1=POC · TP2=VAH/VAL · TP3=extensión/sweep</span></div>
       <div class="master-item"><span class="mbullet">▸</span><span><b>Si dudas → no es setup</b></span></div>
       <div class="master-item"><span class="mbullet">▸</span><span>3 trades perdidos seguidos → reducir riesgo a la mitad hasta próxima sesión</span></div>
       <div class="master-item"><span class="mbullet">▸</span><span>Máximo 1 trade simultáneo por familia</span></div>
@@ -249,7 +254,7 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
         <div class="score-item"><div class="score-lbl">COMPLETADO</div><div class="score-val" id="s-pct" style="color:var(--green)">0%</div><div class="score-bar"><div class="score-bar-fill" id="sb1" style="background:var(--green)"></div></div></div>
         <div class="score-item"><div class="score-lbl">CHECKS ✓</div><div class="score-val" id="s-chk" style="color:var(--text)">0/0</div><div class="score-bar"><div class="score-bar-fill" id="sb2" style="background:var(--blue)"></div></div></div>
         <div class="score-item"><div class="score-lbl">CRÍTICOS ★</div><div class="score-val" id="s-crit" style="color:var(--red)">0/0</div><div class="score-bar"><div class="score-bar-fill" id="sb3" style="background:var(--red)"></div></div></div>
-        <div class="score-item"><div class="score-lbl">R:R MÍNIMO</div><div class="score-val" id="s-rr" style="color:var(--yellow)">—</div><div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap" id="rr-pills"></div></div>
+        <div class="score-item"><div class="score-lbl">GRADO · R:R</div><div class="score-val" id="s-rr" style="color:var(--yellow)">—</div><div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap" id="rr-pills"></div></div>
       </div>
       <div class="decision-badge wait" id="dec-badge">⏳ Completa el checklist para ver la señal</div>
     </div>
@@ -301,6 +306,10 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
     <div class="card" style="margin-bottom:0"><div class="card-hdr">⏱ Winrate por combo TF</div><div class="card-body" style="padding:10px 12px"><svg id="chart-tf" width="100%" height="120" viewBox="0 0 280 120"></svg></div></div>
     <div class="card" style="margin-bottom:0"><div class="card-hdr">🔥 Rachas</div><div class="card-body" style="padding:10px 12px"><svg id="chart-streak" width="100%" height="120" viewBox="0 0 280 120"></svg></div></div>
   </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">⭐ Winrate por GRADO de setup (A+/A/B)</div><div class="card-body" style="padding:10px 12px"><svg id="chart-grade" width="100%" height="140" viewBox="0 0 480 140"></svg></div></div>
+    <div class="card" style="margin-bottom:0"><div class="card-hdr">🎯 R promedio por estrategia + grado</div><div class="card-body" style="padding:10px 12px"><svg id="chart-strat" width="100%" height="140" viewBox="0 0 480 140"></svg></div></div>
+  </div>
   <div class="journal-filters">
     <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">FILTRAR:</span>
     <button class="jfilter active" onclick="setJFilter('all',this)">Todos</button>
@@ -325,11 +334,11 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
         <div style="background:var(--bg3);border:1px solid var(--green);border-radius:12px;padding:16px;cursor:pointer" onclick="selFam(0);showNav('checklist')">
           <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:8px">F1 — SMC Estructura</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.7">★ Estructura HH/HL o LH/LL definida<br>★ CHoCH o BOS en TF intermedio<br>★ Precio en FVG u OB relevante<br>★ CHoCH en TF gatillo<br>→ Squeeze + ADX = ENTRADA<br><span style="color:var(--green)">Riesgo: 1.5–2%</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.7">★ Estructura HH/HL o LH/LL definida<br>★ Precio en Premium o Discount correcto<br>★ POI con confluencia VAH/VAL/POC<br>★ CHoCH/BOS en TF intermedio + LTF<br>★ TPs escalonados: POC → VAH/VAL<br>→ Sistema A+/A/B según confluencias<br><span style="color:var(--green)">Riesgo: 1.5–2%</span></div>
         </div>
         <div style="background:var(--bg3);border:1px solid var(--blue);border-radius:12px;padding:16px;cursor:pointer" onclick="selFam(1);showNav('checklist')">
           <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:8px">F2 — Momentum MA</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.7">★ ActionWave mismo color en los 3 TF<br>★ EMA 9/54 alineadas en los 3 TF<br>★ EMA Slope no gris en TF contexto<br>★ Squeeze a favor + medias separadas<br>→ Giro Squeeze TF menor = ENTRADA<br><span style="color:var(--blue)">Riesgo: 1%</span></div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.7">★ EMA 9/54 alineadas en los 3 TF<br>★ EMA Slope no gris en TF contexto<br>★ ADX > 25 con pendiente positiva<br>★ Squeeze a favor + medias separadas<br>★ Money Flow + Delta direccional<br>→ Giro Squeeze TF menor = ENTRADA<br><span style="color:var(--blue)">Riesgo: 1%</span></div>
         </div>
       </div>
       <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:10px">COMBOS TF · MISMA LÓGICA, DISTINTO HORIZONTE Y R:R</div>
@@ -369,6 +378,7 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
       <div class="modal-field"><label>R RESULTADO</label><input id="m-result" type="number" step="0.1"></div>
       <div class="modal-field"><label>¿SISTEMA AL 100%?</label><select id="m-system"><option value="yes">Sí</option><option value="partial">Parcial</option><option value="no">No</option></select></div>
       <div class="modal-field"><label>% CRITERIOS</label><input id="m-pct" type="number" step="1" min="0" max="100"></div>
+      <div class="modal-field"><label>GRADO SETUP</label><select id="m-grade"><option value="">— Sin grado</option><option value="A+">⭐⭐⭐ A+</option><option value="A">⭐⭐ A</option><option value="B">⭐ B</option></select></div>
     </div>
     <div class="modal-field" style="margin-top:12px"><label>NOTAS</label><textarea id="m-notes" rows="3" style="width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;border-radius:7px;outline:none;resize:vertical"></textarea></div>
     <div class="modal-actions"><button class="btn-save" onclick="updateTrade()">💾 Guardar</button><button class="btn-del" onclick="confirmDeleteTrade()">🗑 Eliminar</button></div>
@@ -381,77 +391,84 @@ window.addEventListener('load',()=>setTimeout(window.loadFromFirebase,500));
 // ═══════════════════════════════════════════════
 const FAMILIES = [
   { id:'F1', name:'SMC Estructura', color:'#00e5a0', riskPct:1.5,
-    ctx:"<b>F1 SMC activa.</b> Top-down: estructura en TF contexto → CHoCH/BOS TF intermedio → pullback FVG/OB → CHoCH TF gatillo → Squeeze+ADX. Condición necesaria en cada capa antes de bajar.",
+    ctx:"<b>F1 SMC v10.</b> Jerarquía: críticas ★ (gating) + importantes ◆ (suman score) + opcionales · (refuerzan). Confluencia obligatoria: estructura SMC + Volume Profile + Money Flow + Delta. Top-down: HTF → MTF (POI con VAH/VAL/POC) → LTF (CHoCH).",
     phases:[
-      { name:"Contexto", color:"#00e5a0", items:[
-        {n:1,t:"Estructura definida: HH/HL (alcista) o LH/LL (bajista) — manda siempre",c:true},
-        {n:2,t:"ADX > 25 en TF de contexto con pendiente positiva",c:true},
-        {n:3,t:"ActionWave alineado con el bias del trade",c:true},
-        {n:4,t:"TF superior no en dirección opuesta — descarta coletazo mayor",c:true},
-        {n:5,t:"Precio en zona premium (cortos) o discount (largos)"},
-        {n:6,t:"Histograma Squeeze en dirección o achicándose (pullback terminando)"},
+      { name:"Contexto HTF", color:"#00e5a0", items:[
+        {n:1,t:"Estructura definida: HH/HL (alcista) o LH/LL (bajista) en TF contexto",c:true,w:'crit'},
+        {n:2,t:"Precio en zona correcta: Discount (LONG) o Premium (SHORT)",c:true,w:'crit'},
+        {n:3,t:"TF superior NO está en dirección opuesta — descarta coletazo mayor",c:true,w:'crit'},
+        {n:4,t:"ADX > 23 en TF contexto con pendiente positiva",w:'imp'},
+        {n:5,t:"Money Flow alto en zona objetivo (BigBeluga azul prominente)",w:'imp'},
+        {n:6,t:"Volume Delta direccional confirma bias (verde long / rojo short)",w:'imp'},
+        {n:7,t:"POC histórico o VAH/VAL HTF cerca del POI",w:'opt'},
       ]},
-      { name:"Ejecución", color:"#3b82f6", items:[
-        {n:7,t:"CHoCH o BOS en TF intermedio — cambio de carácter confirmado",c:true},
-        {n:8,t:"Pullback del precio hacia FVG u OB relevante",c:true},
-        {n:9,t:"ADX > 25 en TF intermedio con pendiente positiva",c:true},
-        {n:10,t:"Histograma Squeeze en dirección del trade o punto de giro",c:true},
-        {n:11,t:"ATR permite el R:R mínimo del combo hacia objetivo",c:true},
-        {n:12,t:"Zona en discount (compras) o premium (ventas)"},
-        {n:13,t:"Liquidez barrida antes de la zona de entrada"},
+      { name:"Ejecución MTF", color:"#3b82f6", items:[
+        {n:8,t:"POI identificado: OB o FVG con confluencia VAH/VAL/POC del rango activo",c:true,w:'crit'},
+        {n:9,t:"CHoCH o BOS confirmado en TF intermedio en dirección del trade",c:true,w:'crit'},
+        {n:10,t:"ATR permite R:R mínimo ≥ 1:2 hacia el objetivo",c:true,w:'crit'},
+        {n:11,t:"Histograma Squeeze a favor o punto de giro",w:'imp'},
+        {n:12,t:"Liquidez barrida (sweep) antes de la zona de entrada",w:'opt'},
+        {n:13,t:"Etiqueta del rango BigBeluga: STRONG o BALANCED (no WEAK)",w:'opt'},
+        {n:14,t:"EMS + Divergence Line confirma dirección",w:'opt'},
       ]},
-      { name:"Gatillo", color:"#8b5cf6", items:[
-        {n:14,t:"Precio llegó a la zona FVG/OB del TF intermedio",c:true},
-        {n:15,t:"CHoCH en TF gatillo — confirma rechazo de zona y giro",c:true},
-        {n:16,t:"Squeeze Momentum TF gatillo girando hacia el bias",c:true},
-        {n:17,t:"ADX TF gatillo con pendiente positiva hacia 25",c:true},
-        {n:18,t:"SL técnico bajo/sobre el OB o FVG del TF intermedio",c:true},
-        {n:19,t:"Riesgo ≤ 1.5% (hasta 2% si todo cumplido, sin trade abierto)",c:true},
-        {n:20,t:"Mini pullback post-CHoCH antes de vela de confirmación"},
+      { name:"Gatillo LTF", color:"#8b5cf6", items:[
+        {n:15,t:"Precio llegó al POI y muestra reacción (mecha + rechazo)",c:true,w:'crit'},
+        {n:16,t:"CHoCH o BOS en LTF — confirma rechazo y giro",c:true,w:'crit'},
+        {n:17,t:"SL técnico definido (fuera del POI + ATR/2 buffer)",c:true,w:'crit'},
+        {n:18,t:"TPs escalonados definidos: TP1=POC, TP2=VAH/VAL, TP3=extensión",c:true,w:'crit'},
+        {n:19,t:"Volumen tradicional creciente en vela de confirmación",w:'imp'},
+        {n:20,t:"POC naranja BigBeluga cerca del nivel de entrada",w:'opt'},
+        {n:21,t:"Sesión de alta liquidez activa (NY · Golden Window 07–10 GT)",w:'opt'},
       ]},
     ],
     mgmt:[
       {t:"Precio recorre 1R",a:"Mover SL a breakeven — operación sin riesgo"},
-      {t:"50% del objetivo",a:"Cerrar 30–50% de la posición"},
+      {t:"TP1 alcanzado (POC)",a:"Cerrar 50% — alta probabilidad estadística (~75%)"},
+      {t:"TP2 alcanzado (VAH/VAL)",a:"Cerrar 30% — mover SL a TP1"},
+      {t:"TP3 zona extendida",a:"Cerrar 15% — dejar 5% runner con trail"},
+      {t:"Delta cambia signo",a:"Salir — orderflow se invierte"},
       {t:"ADX empieza a caer",a:"Evaluar cierre parcial — momentum debilitándose"},
-      {t:"BOS en TF intermedio",a:"TP en zona TF contexto — recorrido confirmado"},
-      {t:"Resto posición",a:"Dejar correr con SL en breakeven"},
     ]
   },
   { id:'F2', name:'Momentum MA', color:'#3b82f6', riskPct:1.0,
-    ctx:"<b>F2 Momentum activa.</b> Filtros binarios en cascada: ActionWave → MAs alineadas → EMA Slope no gris → Squeeze a favor → gatillo TF menor. Sin interpretación de zonas — todo objetivo.",
+    ctx:"<b>F2 Momentum v10.</b> Filtros binarios en cascada con jerarquía: críticas ★ + importantes ◆ + opcionales ·. MAs alineadas + EMA Slope + Squeeze + Money Flow/Delta direccional. Sistema objetivo sin interpretación de zonas.",
     phases:[
       { name:"Filtros HTF", color:"#3b82f6", items:[
-        {n:1,t:"ActionWave mismo color en TF contexto Y TF intermedio",c:true},
-        {n:2,t:"EMA 9 sobre EMA 54 (alcista) / bajo (bajista) en TF contexto Y intermedio",c:true},
-        {n:3,t:"EMA Slope NO gris en TF contexto — descarta lateral",c:true},
-        {n:4,t:"EMA Slope NO gris en TF intermedio — confirma impulso activo",c:true},
-        {n:5,t:"ADX > 25 en TF contexto con pendiente positiva",c:true},
-        {n:6,t:"Medias separándose — no comprimidas ni cruzándose"},
+        {n:1,t:"EMA 9 sobre EMA 54 (alcista) / bajo (bajista) en TF contexto Y intermedio",c:true,w:'crit'},
+        {n:2,t:"EMA Slope NO gris en TF contexto — descarta lateral",c:true,w:'crit'},
+        {n:3,t:"ADX > 25 en TF contexto con pendiente positiva",c:true,w:'crit'},
+        {n:4,t:"EMA Slope NO gris en TF intermedio — confirma impulso activo",w:'imp'},
+        {n:5,t:"Volume Delta direccional alto en TF contexto (mismo signo que bias)",w:'imp'},
+        {n:6,t:"Money Flow creciente en la dirección de la tendencia",w:'imp'},
+        {n:7,t:"Medias separándose — no comprimidas ni cruzándose",w:'opt'},
       ]},
-      { name:"Confirmación", color:"#0ea5e9", items:[
-        {n:7,t:"Histograma Squeeze TF intermedio creciendo en dirección del bias",c:true},
-        {n:8,t:"ActionWave TF intermedio mismo color que TF contexto",c:true},
-        {n:9,t:"ADX > 25 en TF intermedio — tendencia con fuerza real",c:true},
-        {n:10,t:"ATR permite el R:R mínimo del combo hacia objetivo",c:true},
-        {n:11,t:"Precio no en zona de resistencia/soporte mayor que bloquee"},
+      { name:"Confirmación MTF", color:"#0ea5e9", items:[
+        {n:8,t:"Histograma Squeeze TF intermedio creciendo en dirección del bias",c:true,w:'crit'},
+        {n:9,t:"ADX > 25 en TF intermedio — tendencia con fuerza real",c:true,w:'crit'},
+        {n:10,t:"ATR permite el R:R mínimo del combo hacia objetivo",c:true,w:'crit'},
+        {n:11,t:"Precio NO en zona de resistencia/soporte mayor que bloquee",w:'imp'},
+        {n:12,t:"Volumen tradicional creciente (no drying up)",w:'imp'},
+        {n:13,t:"EMS + Divergence Line confirma momentum",w:'opt'},
+        {n:14,t:"Etiqueta del rango BigBeluga: STRONG (preferible)",w:'opt'},
       ]},
-      { name:"Gatillo", color:"#8b5cf6", items:[
-        {n:12,t:"ActionWave TF gatillo mismo color — alineación 3 TF completa",c:true},
-        {n:13,t:"Squeeze Momentum TF gatillo: primer giro del histograma hacia el bias",c:true},
-        {n:14,t:"ADX TF gatillo con pendiente positiva hacia 25",c:true},
-        {n:15,t:"EMA 9 sobre/bajo EMA 54 en TF gatillo alineado con bias",c:true},
-        {n:16,t:"SL bajo/sobre EMA 9 del TF gatillo o mínimo del último swing",c:true},
-        {n:17,t:"Riesgo ≤ 1% del capital",c:true},
-        {n:18,t:"No entrar si histograma ya grande — esperar siguiente compresión"},
+      { name:"Gatillo LTF", color:"#8b5cf6", items:[
+        {n:15,t:"Squeeze Momentum TF gatillo: primer giro del histograma hacia el bias",c:true,w:'crit'},
+        {n:16,t:"EMA 9 sobre/bajo EMA 54 en TF gatillo alineado con bias",c:true,w:'crit'},
+        {n:17,t:"SL bajo/sobre EMA 9 del TF gatillo o mínimo del último swing",c:true,w:'crit'},
+        {n:18,t:"TPs escalonados definidos antes de entrar",c:true,w:'crit'},
+        {n:19,t:"ADX TF gatillo con pendiente positiva hacia 25",w:'imp'},
+        {n:20,t:"Delta positivo sostenido en LTF (huella institucional)",w:'imp'},
+        {n:21,t:"Sesión activa de alta liquidez",w:'opt'},
+        {n:22,t:"No entrar si histograma ya grande — esperar siguiente compresión",w:'opt'},
       ]},
     ],
     mgmt:[
       {t:"Precio recorre 1R",a:"Mover SL a breakeven"},
-      {t:"50% del objetivo",a:"Cerrar 30–50% de la posición"},
+      {t:"TP1 alcanzado",a:"Cerrar 50% — siguiente HVN o resistencia"},
+      {t:"TP2 alcanzado",a:"Cerrar 30% — mover SL a TP1"},
       {t:"EMA Slope gira gris",a:"Salir — impulso agotándose"},
-      {t:"ActionWave cambia color",a:"Salir inmediatamente — momentum invertido"},
-      {t:"Resto",a:"Dejar correr hasta siguiente zona de liquidez"},
+      {t:"Delta cambia signo",a:"Salir inmediatamente — momentum invertido"},
+      {t:"Resto",a:"Dejar correr hasta siguiente zona de liquidez con trail"},
     ]
   }
 ];
@@ -538,10 +555,41 @@ function getScore(asset,fi,ti) {
   const arr = assetState[asset][fi][ti];
   const f = FAMILIES[fi];
   const total=arr.length, checked=arr.filter(v=>v===true).length, answered=arr.filter(v=>v!==null).length;
-  const crits=f.phases.flatMap((ph,pi)=>ph.items.map((it,ii)=>({...it,g:gIdx(fi,pi,ii)})).filter(it=>it.c));
-  const critFailed=crits.some(it=>arr[it.g]===false);
-  const critChecked=crits.filter(it=>arr[it.g]===true).length;
-  return {total,checked,answered,pct:total?Math.round(checked/total*100):0,critFailed,critChecked,critTotal:crits.length};
+  // Items por jerarquía (críticas/importantes/opcionales)
+  const allItems = f.phases.flatMap((ph,pi)=>ph.items.map((it,ii)=>({...it,g:gIdx(fi,pi,ii)})));
+  const crits = allItems.filter(it=>it.c || it.w==='crit');
+  const imps  = allItems.filter(it=>it.w==='imp');
+  const opts  = allItems.filter(it=>it.w==='opt');
+  const critFailed = crits.some(it=>arr[it.g]===false);
+  const critChecked = crits.filter(it=>arr[it.g]===true).length;
+  const impChecked = imps.filter(it=>arr[it.g]===true).length;
+  const optChecked = opts.filter(it=>arr[it.g]===true).length;
+  // Score numérico: críticas son gating (no suman), importantes 1pt c/u, opcionales 0.5pt c/u
+  const scoreNum = impChecked*1 + optChecked*0.5;
+  const scoreMax = imps.length*1 + opts.length*0.5;
+  // Calcular grado solo si todas las críticas están cumplidas
+  let grade = '', gradeColor = '#4a6080', gradeSize = 0;
+  const critAllOk = critChecked === crits.length && crits.length > 0 && !critFailed;
+  if(critFailed) { grade = '✗'; gradeColor = '#ff4560'; }
+  else if(answered === 0) { grade = '—'; gradeColor = '#4a6080'; }
+  else if(critAllOk) {
+    if(scoreNum >= scoreMax * 0.85) { grade = 'A+'; gradeColor = '#00e5a0'; gradeSize = 1.5; }
+    else if(scoreNum >= scoreMax * 0.60) { grade = 'A'; gradeColor = '#00c488'; gradeSize = 1.0; }
+    else if(scoreNum >= scoreMax * 0.35) { grade = 'B'; gradeColor = '#f59e0b'; gradeSize = 0.75; }
+    else { grade = 'B'; gradeColor = '#f59e0b'; gradeSize = 0.5; }
+  } else {
+    grade = '...'; gradeColor = '#f59e0b';
+  }
+  return {
+    total,checked,answered,
+    pct: total ? Math.round(checked/total*100) : 0,
+    critFailed,critChecked,critTotal: crits.length,
+    impChecked,impTotal: imps.length,
+    optChecked,optTotal: opts.length,
+    scoreNum,scoreMax,
+    grade,gradeColor,gradeSize,
+    critAllOk
+  };
 }
 
 function getSignal(asset,fi,ti) {
@@ -619,9 +667,14 @@ function render() {
   // ctx
   const ca=document.getElementById('ctx-alert');
   ca.className='ctx-alert info';
-  ca.innerHTML=`${f.ctx} <b style="color:${f.color}">${tf.label} (${tf.tfs.join('→')})</b>`;
+  ca.innerHTML=`${f.ctx} <b style="color:${f.color}">${tf.label} (${tf.tfs.join('→')})</b>
+  <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(59,130,246,0.2);display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;font-family:var(--mono)">
+    <span style="color:var(--red)">★ Críticas (gating · OBLIGATORIAS)</span>
+    <span style="color:var(--yellow)">◆ Importantes (1 pt c/u)</span>
+    <span style="color:var(--blue)">· Opcionales (0.5 pt c/u)</span>
+  </div>`;
 
-  // phases
+  // phases con marcadores jerárquicos
   const grid=document.getElementById('phase-grid'); grid.innerHTML='';
   f.phases.forEach((ph,pi) => {
     const total=ph.items.length;
@@ -633,39 +686,54 @@ function render() {
     <div class="phase-prog"><div class="phase-prog-fill" style="width:${pct}%;background:${ph.color}"></div></div>
     <div class="phase-items">${ph.items.map((item,ii)=>{
       const g=gIdx(curFam,pi,ii),v=checks[g],cls=v===true?'yes':v===false?'no':'';
-      return`<div class="check-item ${cls}" onclick="toggleCheck(${pi},${ii})"><div class="check-box">${v===true?'✓':v===false?'✗':''}</div><span class="check-num">${item.n}</span><span class="check-text">${item.t}${item.c?'<span class="check-crit"> ★</span>':''}</span></div>`;
+      // Marcador jerárquico
+      const isCrit = item.c || item.w==='crit';
+      const isImp = item.w==='imp';
+      const isOpt = item.w==='opt';
+      let marker = '';
+      if(isCrit) marker = '<span class="check-crit" style="color:var(--red)"> ★</span>';
+      else if(isImp) marker = '<span class="check-crit" style="color:var(--yellow)"> ◆</span>';
+      else if(isOpt) marker = '<span class="check-crit" style="color:var(--blue)"> ·</span>';
+      return`<div class="check-item ${cls}" onclick="toggleCheck(${pi},${ii})"><div class="check-box">${v===true?'✓':v===false?'✗':''}</div><span class="check-num">${item.n}</span><span class="check-text">${item.t}${marker}</span></div>`;
     }).join('')}</div>`;
     grid.appendChild(card);
   });
 
-  // scores
-  const total=checks.length, answered=checks.filter(v=>v!==null).length, checked=checks.filter(v=>v===true).length;
-  const pct=answered?Math.round(answered/total*100):0;
-  const critItems=f.phases.flatMap((ph,pi)=>ph.items.map((it,ii)=>({...it,g:gIdx(curFam,pi,ii)})).filter(it=>it.c));
-  const critTotal=critItems.length, critChecked=critItems.filter(it=>checks[it.g]===true).length;
-  const critFailed=critItems.some(it=>checks[it.g]===false);
-  document.getElementById('s-pct').textContent=pct+'%';
-  document.getElementById('s-chk').textContent=checked+'/'+total;
-  document.getElementById('s-crit').textContent=critChecked+'/'+critTotal;
-  document.getElementById('sb1').style.width=pct+'%';
-  document.getElementById('sb2').style.width=total?Math.round(checked/total*100)+'%':'0%';
-  document.getElementById('sb3').style.width=critTotal?Math.round(critChecked/critTotal*100)+'%':'0%';
-  document.getElementById('sb3').style.background=critFailed?'var(--red)':critChecked===critTotal&&critTotal>0?'var(--green)':'var(--yellow)';
-  document.getElementById('s-crit').style.color=critFailed?'var(--red)':critChecked===critTotal&&critTotal>0?'var(--green)':'var(--yellow)';
-  const rrs=tf.rr[fkey];
-  document.getElementById('s-rr').textContent=rrs[0];
-  document.getElementById('rr-pills').innerHTML=rrs.map((r,i)=>`<div style="font-family:var(--mono);font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid ${i===0?f.color:'var(--border)'};color:${i===0?f.color:'var(--muted)'};background:${i===0?f.color+'18':'transparent'}">${r}</div>`).join('');
+  // scores con jerarquía + grado
+  const sc = getScore(curAsset, curFam, curTF);
+  document.getElementById('s-pct').textContent=sc.pct+'%';
+  document.getElementById('s-chk').textContent=sc.checked+'/'+sc.total;
+  document.getElementById('s-crit').textContent=sc.critChecked+'/'+sc.critTotal;
+  document.getElementById('sb1').style.width=sc.pct+'%';
+  document.getElementById('sb2').style.width=sc.total?Math.round(sc.checked/sc.total*100)+'%':'0%';
+  document.getElementById('sb3').style.width=sc.critTotal?Math.round(sc.critChecked/sc.critTotal*100)+'%':'0%';
+  document.getElementById('sb3').style.background=sc.critFailed?'var(--red)':sc.critAllOk?'var(--green)':'var(--yellow)';
+  document.getElementById('s-crit').style.color=sc.critFailed?'var(--red)':sc.critAllOk?'var(--green)':'var(--yellow)';
 
-  // decision badge
+  // Actualizar el cuarto bloque del score grid: grado + R:R
+  const sRR = document.getElementById('s-rr');
+  const rrs=tf.rr[fkey];
+  if(sc.grade && sc.grade !== '—' && sc.grade !== '...' && sc.grade !== '✗') {
+    sRR.innerHTML = `<span style="color:${sc.gradeColor};font-size:32px">${sc.grade}</span> <span style="color:var(--muted);font-size:14px">${rrs[0]}</span>`;
+  } else {
+    sRR.innerHTML = `<span style="color:${sc.gradeColor}">${sc.grade||'—'}</span>`;
+  }
+  document.getElementById('rr-pills').innerHTML = `
+    <div style="font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--yellow);color:var(--yellow);background:rgba(245,158,11,0.08)">◆ ${sc.impChecked}/${sc.impTotal}</div>
+    <div style="font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--blue);color:var(--blue);background:rgba(59,130,246,0.08)">· ${sc.optChecked}/${sc.optTotal}</div>
+    <div style="font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted)">${sc.scoreNum.toFixed(1)}/${sc.scoreMax.toFixed(1)}</div>`;
+
+  // decision badge con grado
   const badge=document.getElementById('dec-badge'), ep=document.getElementById('execute-panel');
-  if(answered===0){badge.className='decision-badge wait';badge.textContent='⏳ Completa el checklist para ver la señal';ep.classList.add('hidden');}
-  else if(critFailed){badge.className='decision-badge stop';badge.textContent='🚫 CRITERIO CRÍTICO ★ FALLIDO — No operar';ep.classList.add('hidden');}
-  else if(critChecked===critTotal&&critTotal>0){
+  if(sc.answered===0){badge.className='decision-badge wait';badge.textContent='⏳ Completa el checklist para ver la señal';ep.classList.add('hidden');}
+  else if(sc.critFailed){badge.className='decision-badge stop';badge.textContent='🚫 CRITERIO CRÍTICO ★ FALLIDO — No operar';ep.classList.add('hidden');}
+  else if(sc.critAllOk){
     badge.className='decision-badge go';
-    badge.innerHTML=`✅ CRÍTICOS OK (${critChecked}/${critTotal} ★ · ${pct}% total) · <button onclick="showExecutePanel()" style="background:${f.color};border:none;color:#000;font-family:var(--sans);font-weight:700;padding:4px 14px;border-radius:6px;cursor:pointer;margin-left:8px;font-size:12px">⚡ Registrar operación</button>`;
+    const sizePct = Math.round((sc.gradeSize||1)*100);
+    badge.innerHTML=`✅ <span style="color:${sc.gradeColor};font-weight:800">SETUP ${sc.grade}</span> · ${sc.critChecked}/${sc.critTotal}★ · ${sc.impChecked}/${sc.impTotal}◆ · ${sc.optChecked}/${sc.optTotal}· · Tamaño sugerido: <b>${sizePct}%</b> · <button onclick="showExecutePanel()" style="background:${sc.gradeColor};border:none;color:#000;font-family:var(--sans);font-weight:700;padding:4px 14px;border-radius:6px;cursor:pointer;margin-left:8px;font-size:12px">⚡ Registrar operación</button>`;
     updateExecutePanelDefaults();
   }
-  else{badge.className='decision-badge wait';badge.textContent='⏳ Setup incompleto — sigue verificando';ep.classList.add('hidden');}
+  else{badge.className='decision-badge wait';badge.textContent='⏳ Setup incompleto — sigue verificando críticas ★';ep.classList.add('hidden');}
 
   // mgmt
   document.getElementById('mgmt-body').innerHTML=f.mgmt.map(m=>`<div class="mgmt-row"><span class="mgmt-t">${m.t}</span><span class="mgmt-a">${m.a}</span></div>`).join('');
@@ -709,7 +777,9 @@ async function executeEntry(){
   const notes=document.getElementById('ex-notes').value.trim();
   if(!asset||isNaN(entry)||isNaN(sl)||isNaN(tp)){alert('Completa: activo, entrada, SL y TP');return;}
   const rr=Math.abs(entry-sl)?parseFloat((Math.abs(tp-entry)/Math.abs(entry-sl)).toFixed(2)):0;
-  const trade={asset,dir,tf,entry,sl,tp,risk,rr,critPct:pct,family:'F'+(curFam+1),familyName:FAMILIES[curFam].name,tfCombo:TF_COMBOS[curTF].label,status:'open',result:null,notes,followedSystem:'yes',timestamp:new Date().toISOString(),capital};
+  // Capturar grado actual del setup
+  const sc=getScore(curAsset,curFam,curTF);
+  const trade={asset,dir,tf,entry,sl,tp,risk,rr,critPct:pct,family:'F'+(curFam+1),familyName:FAMILIES[curFam].name,tfCombo:TF_COMBOS[curTF].label,grade:sc.grade,scoreNum:sc.scoreNum,scoreMax:sc.scoreMax,status:'open',result:null,notes,followedSystem:'yes',timestamp:new Date().toISOString(),capital};
   const btn=document.getElementById('btn-exec');btn.disabled=true;btn.textContent='Guardando...';
   const id=await window.saveTrade(trade);
   if(id){trade.id=id;allTrades.unshift(trade);hideExecutePanel();renderJournal();btn.disabled=false;btn.textContent='⚡ REGISTRAR ENTRADA';['ex-entry','ex-sl','ex-tp','ex-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('rr-live').textContent='—';}
@@ -755,10 +825,14 @@ function renderJournalTable(){
     const rs=t.result!=null?(parseFloat(t.result)>0?'+':'')+parseFloat(t.result).toFixed(1)+'R':'—';
     const pnl=t.result&&t.risk?((parseFloat(t.result)*parseFloat(t.risk))>=0?'+':'')+((parseFloat(t.result)*parseFloat(t.risk)).toFixed(2))+'%':'—';
     const fc=t.family==='F1'?'var(--green)':'var(--blue)';
+    // Color de grado
+    const gradeColors={'A+':'#00e5a0','A':'#00c488','B':'#f59e0b'};
+    const gc=gradeColors[t.grade]||'#4a6080';
+    const gradeStr=t.grade?` <span style="color:${gc};font-weight:800">${t.grade}</span>`:'';
     return`<div class="trade-row ${rc}" onclick="openTradeModal('${t.id}')">
       <span style="color:var(--muted)">${ds}</span>
       <span style="font-weight:700;color:#fff">${t.asset||'—'}</span>
-      <span style="font-size:9px;color:${fc}">${t.family}</span>
+      <span style="font-size:9px;color:${fc}">${t.family}${gradeStr}</span>
       <span style="font-size:9px;color:var(--muted)">${t.tfCombo||t.tf||'—'}</span>
       <span style="color:${t.dir==='LONG'?'var(--green)':'var(--red)'}">${t.dir==='LONG'?'▲':'▼'} ${t.dir}</span>
       <span style="color:var(--muted)">${t.rr?'1:'+t.rr:'—'}</span>
@@ -915,9 +989,104 @@ function renderChartStreak(trades){
   el.innerHTML=svg;
 }
 
+function renderChartGrade(trades){
+  const el=document.getElementById('chart-grade');if(!el)return;
+  const W=480,H=140,PL=40,PR=10,PT=20,PB=40;
+  const grades=[
+    {label:'A+',color:'#00e5a0'},
+    {label:'A',color:'#00c488'},
+    {label:'B',color:'#f59e0b'},
+    {label:'Sin grado',color:'#4a6080',k:''},
+  ];
+  // Agrupa trades por grado
+  grades.forEach(g=>{
+    const closed=trades.filter(t=>t.status!=='open'&&(t.grade===g.label||(g.k===''&&!t.grade)));
+    g.total=closed.length;
+    g.wins=closed.filter(t=>t.status==='win').length;
+    g.wr=closed.length?Math.round(g.wins/closed.length*100):0;
+    g.avgR=closed.length?closed.reduce((s,t)=>s+parseFloat(t.result||0),0)/closed.length:0;
+  });
+  const totalTrades=grades.reduce((s,g)=>s+g.total,0);
+  if(totalTrades===0){el.innerHTML=svgT(240,70,'Sin operaciones cerradas con grado','#4a6080',10);return;}
+  const bw=(W-PL-PR)/grades.length;
+  let svg='';
+  // ejes
+  svg+=`<line x1="${PL}" y1="${H-PB}" x2="${W-PR}" y2="${H-PB}" stroke="#1e2d45" stroke-width="0.5"/>`;
+  [0,25,50,75,100].forEach(p=>{
+    const y=PT+(H-PT-PB)*(1-p/100);
+    svg+=`<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="#1e2d4540" stroke-width="0.4" stroke-dasharray="2 3"/>`;
+    svg+=svgT(PL-4,y+3,p+'%','#4a6080',8,'end');
+  });
+  grades.forEach((g,i)=>{
+    const x=PL+i*bw+10;
+    const bh=(H-PT-PB)*(g.wr/100);
+    const bx=x,by=H-PB-bh,bwidth=bw-20;
+    svg+=`<rect x="${bx}" y="${PT}" width="${bwidth}" height="${H-PT-PB}" fill="#1e2d4530" rx="3"/>`;
+    if(g.total>0&&g.wr>0){
+      svg+=`<rect x="${bx}" y="${by}" width="${bwidth}" height="${bh}" fill="${g.color}" rx="3" opacity="0.88"/>`;
+      svg+=svgT(bx+bwidth/2,by-4,g.wr+'%',g.color,11,'middle',800);
+    }
+    svg+=svgT(bx+bwidth/2,H-PB+14,g.label,g.color,11,'middle',700);
+    svg+=svgT(bx+bwidth/2,H-PB+26,g.total+' trades','#4a6080',8,'middle');
+    if(g.total>0){
+      const avgC=g.avgR>=0?'#00e5a0':'#ff4560';
+      svg+=svgT(bx+bwidth/2,H-PB+36,(g.avgR>=0?'+':'')+g.avgR.toFixed(2)+'R avg',avgC,8,'middle',700);
+    }
+  });
+  el.innerHTML=svg;
+}
+
+function renderChartStrat(trades){
+  const el=document.getElementById('chart-strat');if(!el)return;
+  const W=480,H=140,PL=80,PR=14,PT=12,PB=22;
+  // Matriz: 2 estrategias x 3 grados = 6 barras agrupadas
+  const strats=[{k:'F1',label:'F1 SMC',color:'#00e5a0'},{k:'F2',label:'F2 MOM',color:'#3b82f6'}];
+  const grades=['A+','A','B'];
+  let svg='';
+  // Línea cero
+  const allR=trades.filter(t=>t.status!=='open'&&t.result!=null).map(t=>parseFloat(t.result));
+  if(!allR.length){el.innerHTML=svgT(240,70,'Sin operaciones cerradas','#4a6080',10);return;}
+  const mn=Math.min(...allR,-1),mx=Math.max(...allR,3),range=mx-mn||1;
+  const zy=PT+(H-PT-PB)*(mx/range);
+  svg+=`<line x1="${PL}" y1="${zy}" x2="${W-PR}" y2="${zy}" stroke="#2a3d55" stroke-width="0.8"/>`;
+  svg+=svgT(PL-4,zy+3,'0','#4a6080',8,'end');
+  svg+=svgT(PL-4,PT+8,mx.toFixed(1)+'R','#00e5a0',8,'end');
+  svg+=svgT(PL-4,H-PB-2,mn.toFixed(1)+'R','#ff4560',8,'end');
+  // Barras agrupadas
+  const groupW=(W-PL-PR)/grades.length;
+  const barW=(groupW-12)/strats.length;
+  grades.forEach((gr,gi)=>{
+    const gx=PL+gi*groupW+6;
+    strats.forEach((st,si)=>{
+      const closed=trades.filter(t=>t.family===st.k&&t.status!=='open'&&t.result!=null&&t.grade===gr);
+      const avgR=closed.length?closed.reduce((s,t)=>s+parseFloat(t.result||0),0)/closed.length:null;
+      const bx=gx+si*barW;
+      if(closed.length>0&&avgR!==null){
+        const by=PT+(H-PT-PB)*((mx-avgR)/range);
+        const bh=Math.abs(zy-by);
+        const top=avgR>=0?by:zy;
+        svg+=`<rect x="${bx+2}" y="${top}" width="${barW-4}" height="${bh}" fill="${st.color}" rx="2" opacity="${closed.length>=3?0.9:0.5}"/>`;
+        const tc=avgR>=0?st.color:'#ff4560';
+        svg+=svgT(bx+barW/2,avgR>=0?by-3:by+bh+8,(avgR>=0?'+':'')+avgR.toFixed(1)+'R',tc,8,'middle',700);
+        svg+=svgT(bx+barW/2,avgR>=0?by+bh+10:by-3,'n='+closed.length,'#4a6080',7,'middle');
+      } else {
+        svg+=`<rect x="${bx+2}" y="${zy-1}" width="${barW-4}" height="2" fill="#1e2d4560" rx="1"/>`;
+      }
+    });
+    svg+=svgT(gx+groupW/2,H-PB+12,gr,'#fff',10,'middle',700);
+  });
+  // Leyenda
+  svg+=`<rect x="${PL+8}" y="${PT+2}" width="8" height="8" fill="#00e5a0" rx="2"/>`;
+  svg+=svgT(PL+22,PT+10,'F1 SMC','#00e5a0',9,'start');
+  svg+=`<rect x="${PL+80}" y="${PT+2}" width="8" height="8" fill="#3b82f6" rx="2"/>`;
+  svg+=svgT(PL+94,PT+10,'F2 MOM','#3b82f6',9,'start');
+  el.innerHTML=svg;
+}
+
 function renderCharts(trades){
   renderChartCurve(trades);renderChartDist(trades);
   renderChartFam(trades);renderChartTF(trades);renderChartStreak(trades);
+  renderChartGrade(trades);renderChartStrat(trades);
 }
 
 function renderJournal(){renderJournalMetrics();renderCharts(allTrades);renderJournalTable();}
@@ -945,6 +1114,7 @@ function openTradeModal(id){
   document.getElementById('m-result').value=t.result||'';
   document.getElementById('m-system').value=t.followedSystem||'yes';
   document.getElementById('m-pct').value=t.critPct||'';
+  document.getElementById('m-grade').value=t.grade||'';
   document.getElementById('m-notes').value=t.notes||'';
   document.getElementById('trade-modal').classList.remove('hidden');
 }
@@ -965,6 +1135,7 @@ async function updateTrade(){
   t.result=parseFloat(document.getElementById('m-result').value)||null;
   t.followedSystem=document.getElementById('m-system').value;
   t.critPct=parseInt(document.getElementById('m-pct').value)||0;
+  t.grade=document.getElementById('m-grade').value||'';
   t.notes=document.getElementById('m-notes').value;
   t.updatedAt=new Date().toISOString();
   await window.saveTrade(t);allTrades[idx]=t;closeModal();renderJournal();
